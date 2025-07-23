@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "baseball.cpp"
+#include "baseball_test.h"
 
 class BaseballFixture : public testing::Test
 {
@@ -17,6 +18,15 @@ public:
       // PASS
     }
   }
+
+  void CheckAnswer(const string guessNumber, int solved, int answerStrikes, int answerBalls)
+  {
+    GuessResult result = game.guess(guessNumber);
+
+    EXPECT_TRUE(result.solved == solved);
+    EXPECT_EQ(answerStrikes, result.strikes);
+    EXPECT_EQ(answerBalls, result.balls);
+  }
 };
 
 TEST_F(BaseballFixture, ThrowExceptionWhenInvalidCase)
@@ -28,65 +38,37 @@ TEST_F(BaseballFixture, ThrowExceptionWhenInvalidCase)
 
 TEST_F(BaseballFixture, ReturnSolvedResultIfMatchNumber)
 {
-  GuessResult result = game.guess("123");
-
-  EXPECT_TRUE(result.solved);
-  EXPECT_EQ(3, result.strikes);
-  EXPECT_EQ(0, result.balls);
+  CheckAnswer("123", true, 3, 0);
 }
 
 TEST_F(BaseballFixture, ReturnSolvedResultIf2S0BCase1)
 {
-  GuessResult result = game.guess("173");
-
-  EXPECT_FALSE(result.solved);
-  EXPECT_EQ(2, result.strikes);
-  EXPECT_EQ(0, result.balls);
+  CheckAnswer("173", false, 2, 0);
 }
 
 TEST_F(BaseballFixture, ReturnSolvedResultIf2S0BCase2)
 {
-  GuessResult result = game.guess("723");
-
-  EXPECT_FALSE(result.solved);
-  EXPECT_EQ(2, result.strikes);
-  EXPECT_EQ(0, result.balls);
+  CheckAnswer("723", false, 2, 0);
 }
 
 TEST_F(BaseballFixture, ReturnSolvedResultIf2S0BCase3)
 {
-  GuessResult result = game.guess("127");
-
-  EXPECT_FALSE(result.solved);
-  EXPECT_EQ(2, result.strikes);
-  EXPECT_EQ(0, result.balls);
+  CheckAnswer("127", false, 2, 0);
 }
 
 TEST_F(BaseballFixture, ReturnSolvedResultIf1S2BCase1)
 {
-  GuessResult result = game.guess("132");
-
-  EXPECT_FALSE(result.solved);
-  EXPECT_EQ(1, result.strikes);
-  EXPECT_EQ(2, result.balls);
+  CheckAnswer("132", false, 1, 2);
 }
 
 TEST_F(BaseballFixture, ReturnSolvedResultIf1S2BCase2)
 {
-  GuessResult result = game.guess("213");
-
-  EXPECT_FALSE(result.solved);
-  EXPECT_EQ(1, result.strikes);
-  EXPECT_EQ(2, result.balls);
+  CheckAnswer("213", false, 1, 2);
 }
 
 TEST_F(BaseballFixture, ReturnSolvedResultIf1S2BCase3)
 {
-  GuessResult result = game.guess("321");
-
-  EXPECT_FALSE(result.solved);
-  EXPECT_EQ(1, result.strikes);
-  EXPECT_EQ(2, result.balls);
+  CheckAnswer("321", false, 1, 2);
 }
 
 int main()

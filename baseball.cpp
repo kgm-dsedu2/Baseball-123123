@@ -11,43 +11,57 @@ struct GuessResult
 class Baseball
 {
 public:
-  explicit Baseball(const string& question)
-    : question(question)
+  explicit Baseball(const string& answer)
+    : answerNumber(answer)
   {
   }
 
   GuessResult guess(const string& guessNumber)
   {
     assertIllegalArgument(guessNumber);
-    if (guessNumber == question)
+
+    int strike = countStrike(guessNumber);
+    if (strike == 3)
     {
-      return { true, 3, 0 };
+      return { true, strike, 0 };
     }
 
+    return { false, strike, countball(guessNumber)};
+  }
+
+  int countStrike(const std::string& guessNumber)
+  {
     int strike = 0;
-    int ball = 0;
     for (int i = 0; i < 3; i++)
     {
-      if (guessNumber[i] == question[i])
+      if (guessNumber[i] == answerNumber[i])
       {
         strike++;
       }
     }
+
+    return strike;
+  }
+
+  int countball(const std::string& guessNumber)
+  {
+    int ball = 0;
     for (int i = 0; i < 3; i++)
     {
       for (int j = 0; j < 3; j++)
       {
         if (i == j) continue;
-        if (guessNumber[i] == question[j])
+        if (guessNumber[i] == answerNumber[j])
         {
           ball++;
         }
       }
     }
 
-    return { false, strike, ball };
+    return ball;
   }
 
+  // Illegal Case
   void assertIllegalArgument(const std::string& guessNumber)
   {
     if (guessNumber.length() != 3)
@@ -72,6 +86,7 @@ public:
       || guessNumber[0] == guessNumber[2]
       || guessNumber[1] == guessNumber[2];
   }
+
 private:
-  string question;
+  string answerNumber;
 };
