@@ -25,6 +25,7 @@ public:
     }
 
     int strike = 0;
+    int ball = 0;
     for (int i = 0; i < 3; i++)
     {
       if (guessNumber[i] == question[i])
@@ -32,8 +33,19 @@ public:
         strike++;
       }
     }
+    for (int i = 0; i < 3; i++)
+    {
+      for (int j = 0; j < 3; j++)
+      {
+        if (i == j) continue;
+        if (guessNumber[i] == question[j])
+        {
+          ball++;
+        }
+      }
+    }
 
-    return { false, strike, 0 };
+    return { false, strike, ball };
   }
 
   void assertIllegalArgument(const std::string& guessNumber)
